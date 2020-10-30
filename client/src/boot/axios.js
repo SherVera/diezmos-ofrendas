@@ -1,4 +1,59 @@
-import Vue from 'vue'
 import axios from 'axios'
+import env from '../env'
+import {
+  Notify
+} from 'quasar'
 
-Vue.prototype.$axios = axios
+const axiosInstance = axios.create({
+  baseURL: env.apiUrl // url base cargada de archivo env.js
+})
+
+export default async ({
+  store,
+  Vue
+}) => {
+  // Vue.prototype.$axios = axios
+  Vue.prototype.$api = axiosInstance
+
+  axiosInstance.interceptors.response.use(
+    function (response) {
+      console.log(response)
+      // console.log('axiosResponse', response)
+      // Todo bien con la respuesta
+      if (response.config.method === 'post') {
+        if (response.status === 201) {
+          if (response.data.token === undefined) {
+            Notify.create({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'fas fa-check-circle',
+              message: 'Registro guardado con éxito!'
+            })
+          }
+        }
+      }
+      return response.data
+    },
+    function (error) {
+      // Error en la respuesta
+      console.log('debug', error.response)
+      if (error.response === undefined) {
+        // Si no hubo comunicación con el servidor
+        console.log('no hay conexion con el servidor', error)
+        Notify.create({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'fas fa-exclamation-triangle',
+          message: 'No se pudo establecer conexión con el servidor. ' +
+            error
+        })
+      }
+
+      // return Promise.reject(data)
+    }
+  )
+}
+
+export {
+  axiosInstance
+}

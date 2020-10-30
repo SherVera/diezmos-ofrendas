@@ -1,1 +1,0 @@
-# diezmos-ofrendas

@@ -17,3 +17,27 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
+
+const addPrefixToGroup = (group) => {
+  // Grupo para rutas con prefijo /api/
+  group.prefix("api");
+  return group;
+};
+
+addPrefixToGroup(
+  Route.group(() => {
+    //////////////////// Iglesias
+    Route.get("church", "IglesiaController.index");
+    Route.post("church", "IglesiaController.store");
+
+
+    //////////////////// Ciudades
+    Route.get("city", "CiudadController.index");
+    Route.post("city", "CiudadController.store");
+
+    /////////////////// Bancos
+    Route.get("bank", "BancoController.index");
+    Route.post("bank", "BancoController.store");
+
+  })
+)

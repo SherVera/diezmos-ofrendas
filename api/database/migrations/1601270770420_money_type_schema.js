@@ -3,18 +3,18 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class TiposMonedaSchema extends Schema {
-  up () {
-    this.create('tipos_monedas', (table) => {
+class MoneyTypeSchema extends Schema {
+  up() {
+    this.create('money_types', (table) => {
       table.increments()
       table.string('nombre', [25]).notNullable()
       table.timestamps()
     })
   }
 
-  down () {
-    this.drop('tipos_monedas')
+  down() {
+    this.drop('money_types')
   }
 }
 
-module.exports = TiposMonedaSchema
+module.exports = MoneyTypeSchema
