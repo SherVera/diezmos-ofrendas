@@ -10,7 +10,7 @@ class EnvelopSchema extends Schema {
       table.date('fecha').notNullable()
       table.integer('personal_id').references('id').inTable('personals').notNullable()
       table.integer('temple_id').references('id').inTable('temples').notNullable()
-      table.decimal('total')
+      table.decimal('total', [25], [2])
       table.timestamps()
     })
   }

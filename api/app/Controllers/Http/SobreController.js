@@ -66,13 +66,14 @@ class SobreController {
         response.unprocessableEntity(validation.messages());
       } else {
         const body = request.only(['personal_id', 'fecha', 'temple_id', 'total'])
+        body.total = Number(body.total)
         const sobre = await Envelop.create(body)
         if (request.body.ten.monto > 0) {
           await TitheOfering.create({
             envelop_id: sobre.id,
             concept_id: 1,
             money_type_id: request.body.ten.money_type_id,
-            monto: request.body.ten.monto
+            monto: Number(request.body.ten.monto)
           })
         }
         if (request.body.offering.monto > 0) {
@@ -80,7 +81,7 @@ class SobreController {
             envelop_id: sobre.id,
             concept_id: 2,
             money_type_id: request.body.offering.money_type_id,
-            monto: request.body.offering.monto
+            monto: Number(request.body.offering.monto)
           })
         }
         if (request.body.allOfferings.length > 0) {
@@ -89,7 +90,7 @@ class SobreController {
               envelop_id: sobre.id,
               concept_id: request.body.allOfferings[i].concept_id,
               money_type_id: request.body.allOfferings[i].money_type_id,
-              monto: request.body.allOfferings[i].monto
+              monto: Number(request.body.allOfferings[i].monto)
             })
           }
         }
@@ -101,7 +102,7 @@ class SobreController {
               fecha: request.body.allTransfer[i].fecha,
               n_transferencia: request.body.allTransfer[i].n_transferencia,
               bank_id: request.body.allTransfer[i].bank_id,
-              monto: request.body.allTransfer[i].monto
+              monto: Number(request.body.allTransfer[i].monto)
             })
             console.log(i);
           }
@@ -109,7 +110,6 @@ class SobreController {
         return response.send(true)
       }
     } catch (e) {
-      console.log(e);
       return response.send(e)
     }
   }

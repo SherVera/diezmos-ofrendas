@@ -122,7 +122,7 @@ class ReportController {
               envelop[i].total
             ])
             totalDiezmo += diezmoOfferings()
-            totalOfrenda += otherOfferings()
+            totalOfrenda += offerings()
             totalOtros += otherOfferings()
             total += Number(envelop[i].total)
           }

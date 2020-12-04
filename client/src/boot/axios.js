@@ -31,9 +31,10 @@ export default async ({
           }
         }
       }
+      console.log(response);
       if (response.config.method === 'post') {
+        console.log(response);
         if (response.status === 422 || response.status === 500 || response.status === 502) {
-          console.log(response);
           if (response.message) {
             Notify.create({
               color: 'green-4',

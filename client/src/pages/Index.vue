@@ -90,7 +90,7 @@
                 </q-item>
               </template>
               <template v-slot:after>
-                <q-btn round color="primary" icon="add"></q-btn>
+                <q-btn round color="primary" icon="add" @click="isChurch = true"></q-btn>
               </template>
             </q-select>
           </div>
