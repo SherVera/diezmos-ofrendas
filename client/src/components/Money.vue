@@ -1,4 +1,4 @@
-<template @confirmBank="confirm" @cancelBank="cancel">
+<template @confirmMoney="confirm" @cancelMoney="cancel">
   <div>
     <q-dialog
       v-model="active"
@@ -14,7 +14,7 @@
         </q-bar>
         <q-card-section>
           <div class="text-h6 row justify-center">
-            Banco
+            Tipo de Moneda
           </div>
         </q-card-section>
 
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: "Bank",
+  name: "Money",
   props: {
     isActive: {
       type: Boolean,
@@ -65,14 +65,14 @@ export default {
   methods: {
     confirm() {
       console.log(this.form);
-      this.$api.post("bank", this.form).then(res => {
+      this.$api.post("money", this.form).then(res => {
         this.form = {};
-        this.$emit("confirmBank");
+        this.$emit("confirmMoney");
       });
     },
     cancel() {
       this.form = {};
-      this.$emit("cancelBank");
+      this.$emit("cancelMoney");
     }
   }
 };

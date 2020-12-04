@@ -9,9 +9,9 @@ class TransferSchema extends Schema {
       table.increments()
       table.date('fecha').notNullable()
       table.string('n_transferencia', [20])
-      table.integer('id_banco').references('id').inTable('banks').notNullable()
+      table.integer('bank_id').references('id').inTable('banks').notNullable()
       table.decimal('monto', [25], [2]).notNullable()
-      table.integer('id_sobre').references('id').inTable('envelops').notNullable()
+      table.integer('envelop_id').references('id').inTable('envelops').notNullable()
       table.timestamps()
     })
   }

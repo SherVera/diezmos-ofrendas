@@ -17,7 +17,6 @@ export default async ({
 
   axiosInstance.interceptors.response.use(
     function (response) {
-      console.log(response)
       // console.log('axiosResponse', response)
       // Todo bien con la respuesta
       if (response.config.method === 'post') {
@@ -32,14 +31,25 @@ export default async ({
           }
         }
       }
+      if (response.config.method === 'post') {
+        if (response.status === 422 || response.status === 500 || response.status === 502) {
+          console.log(response);
+          if (response.message) {
+            Notify.create({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'fas fa-check-circle',
+              message: response.data.message
+            })
+          }
+        }
+      }
       return response.data
     },
     function (error) {
       // Error en la respuesta
-      console.log('debug', error.response)
       if (error.response === undefined) {
         // Si no hubo comunicación con el servidor
-        console.log('no hay conexion con el servidor', error)
         Notify.create({
           color: 'red-5',
           textColor: 'white',

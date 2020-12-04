@@ -39,5 +39,19 @@ addPrefixToGroup(
     Route.get("bank", "BancoController.index");
     Route.post("bank", "BancoController.store");
 
-  })
+    Route.get("concept", "ConceptController.index");
+    Route.post("concept", "ConceptController.store");
+
+    Route.get("money", "TiposMonedaController.index");
+    Route.post("money", "TiposMonedaController.store");
+
+    Route.get("personal", "MiembroController.index");
+    Route.post("personal", "MiembroController.store");
+
+    Route.get("envelop", "SobreController.index");
+    Route.post("envelop", "SobreController.store");
+
+    Route.post("report", "ReportController.getReportBy")
+    Route.get("file/:name", "FileController.getFile")
+    })
 )

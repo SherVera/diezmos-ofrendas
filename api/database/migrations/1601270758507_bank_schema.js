@@ -7,7 +7,7 @@ class BankSchema extends Schema {
   up() {
     this.create('banks', (table) => {
       table.increments()
-      table.string('nombre', [50]).notNullable()
+      table.string('nombre', [50]).notNullable().unique()
       table.timestamps()
     })
   }

@@ -8,7 +8,7 @@ class TempleSchema extends Schema {
     this.create('temples', (table) => {
       table.increments()
       table.string('nombre', [50]).notNullable()
-      table.integer('id_ciudad').references('id').inTable('cities').notNullable()
+      table.integer('city_id').references('id').inTable('cities').notNullable()
       table.timestamps()
     })
   }

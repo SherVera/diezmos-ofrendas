@@ -8,8 +8,8 @@ class EnvelopSchema extends Schema {
     this.create('envelops', (table) => {
       table.increments()
       table.date('fecha').notNullable()
-      table.integer('id_miembro').references('id').inTable('personals').notNullable()
-      table.integer('id_iglesia').references('id').inTable('temples').notNullable()
+      table.integer('personal_id').references('id').inTable('personals').notNullable()
+      table.integer('temple_id').references('id').inTable('temples').notNullable()
       table.decimal('total')
       table.timestamps()
     })

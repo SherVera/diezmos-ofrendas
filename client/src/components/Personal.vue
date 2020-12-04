@@ -1,4 +1,4 @@
-<template @confirmBank="confirm" @cancelBank="cancel">
+<template @confirmPersonal="confirm" @cancelPersonal="cancel">
   <div>
     <q-dialog
       v-model="active"
@@ -14,12 +14,14 @@
         </q-bar>
         <q-card-section>
           <div class="text-h6 row justify-center">
-            Banco
+            Miembro
           </div>
         </q-card-section>
 
         <q-card-section>
-          <q-input v-model="form.nombre" label="Nombre" />
+          <q-input v-model="form.nombres" label="Nombres" />
+          <q-input v-model="form.apellidos" label="Apellidos" />
+          <q-input v-model="form.email" label="Email" />
         </q-card-section>
 
         <q-card-actions align="right">
@@ -44,7 +46,7 @@
 
 <script>
 export default {
-  name: "Bank",
+  name: "Personal",
   props: {
     isActive: {
       type: Boolean,
@@ -65,14 +67,14 @@ export default {
   methods: {
     confirm() {
       console.log(this.form);
-      this.$api.post("bank", this.form).then(res => {
+      this.$api.post("personal", this.form).then(res => {
         this.form = {};
-        this.$emit("confirmBank");
+        this.$emit("confirmPersonal");
       });
     },
     cancel() {
       this.form = {};
-      this.$emit("cancelBank");
+      this.$emit("cancelPersonal");
     }
   }
 };

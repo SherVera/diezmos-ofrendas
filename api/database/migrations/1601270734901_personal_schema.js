@@ -9,7 +9,7 @@ class PersonalSchema extends Schema {
       table.increments()
       table.string('nombres', [50]).notNullable()
       table.string('apellidos', [50]).notNullable()
-      table.string('email', [80])
+      table.string('email', [80]).unique()
       table.timestamps()
     })
   }

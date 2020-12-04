@@ -1,4 +1,4 @@
-<template @confirm="confirm" @cancel="cancel">
+<template @confirmReport="confirm" @cancel="cancel">
   <div>
     <q-dialog
       v-model="active"
@@ -14,18 +14,18 @@
         </q-bar>
         <q-card-section>
           <div class="text-h6 row justify-center">
-            Iglesia
+            Reporte
           </div>
         </q-card-section>
 
         <q-card-section>
           <q-select
             stack-label
-            label="Ciudad"
-            v-model="form.city_id"
-            :options="cities"
-            option-label="nombre"
-            option-value="id"
+            label="Tipo"
+            v-model="form.id"
+            :options="[{ label: 'Semanal', value: 1}, { label: 'Mensual', value: 2}]"
+            option-label="label"
+            option-value="value"
             emit-value
             map-options
           >
@@ -36,16 +36,13 @@
                 </q-item-section>
               </q-item>
             </template>
-            <template v-slot:after>
-              <q-btn
-                round
-                color="primary"
-                icon="add"
-                @click="isActiveCity"
-              ></q-btn>
-            </template>
           </q-select>
-          <q-input v-model="form.nombre" label="Nombre" />
+          <q-input
+              stack-label
+              label="Fecha"
+              v-model="form.fecha"
+              type="date"
+            ></q-input>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -66,21 +63,16 @@
           />
         </q-card-actions>
       </q-card>
-      <city-component
-        :isActive="isCity"
-        @confirmCity="confirmCity"
-        @cancelCity="cancelCity"
-      ></city-component>
     </q-dialog>
   </div>
 </template>
 
 <script>
-import CityComponent from "./City";
+import { openURL } from 'quasar'
+import env from '.././env'
 
 export default {
-  components: { CityComponent },
-  name: "Church",
+  name: "Report",
   props: {
     isActive: {
       type: Boolean,
@@ -89,10 +81,8 @@ export default {
   },
   data() {
     return {
-      isCity: false,
       active: false,
-      form: {},
-      cities: []
+      form: {}
     };
   },
   watch: {
@@ -100,35 +90,19 @@ export default {
       this.active = newVal;
     }
   },
-  created() {
-    this.getCities();
-  },
   methods: {
-    async getCities() {
-      await this.$api.get("city").then(res => {
-        this.cities = res;
-      });
-    },
-    confirm() {
-      this.$api.post("church", this.form).then(res => {
-        this.form = {};
-        this.$emit("confirm");
+    async confirm () {
+      await this.$api.post(`report`, this.form).then(async res => {
+        if (res) {
+          await openURL(env.apiUrl + 'file/' + res)
+          this.$emit("confirmReport");
+        }
       });
     },
     cancel() {
       this.form = {};
       this.$emit("cancel");
     },
-    isActiveCity() {
-      this.isCity = true;
-    },
-    confirmCity() {
-      this.getCities();
-      this.isCity = false;
-    },
-    cancelCity() {
-      this.isCity = false;
-    }
   }
 };
 </script>

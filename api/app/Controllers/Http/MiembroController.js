@@ -1,151 +1,130 @@
 'use strict'
-const Temple = use('App/Models/Temple')
+const Personal = use('App/Models/Personal')
 const {
   validate
 } = use("Validator")
 const rule = {
-  city_id: 'required|integer',
-  nombre: 'required|string'
+  apellidos: 'required|string',
+  email: 'required|string',
+  nombres: 'required|string'
 }
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with iglesias
+ * Resourceful controller for interacting with miembros
  */
-class IglesiaController {
+class MiembroController {
   /**
-   * Show a list of all iglesias.
-   * GET iglesias
+   * Show a list of all miembros.
+   * GET miembros
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({
-    request,
-    response,
-    view
-  }) {
+  async index ({ request, response, view }) {
     try {
-      const iglesias = await Temple.query().with('cities').fetch()
-      return response.send(iglesias)
+      let personals = (await Personal.all()).toJSON()
+      for (let i of personals) {
+        i.full_name = `${i.nombres} - ${i.apellidos}`
+      }
+      return response.send(personals)
     } catch (e) {
       return response.send(e)
     }
-
   }
 
   /**
-   * Render a form to be used for creating a new iglesia.
-   * GET iglesias/create
+   * Render a form to be used for creating a new miembro.
+   * GET miembros/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create({
-    request,
-    response,
-    view
-  }) {}
+  async create ({ request, response, view }) {
+  }
 
   /**
-   * Create/save a new iglesia.
-   * POST iglesias
+   * Create/save a new miembro.
+   * POST miembros
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({
-    request,
-    response
-  }) {
+  async store ({ request, response }) {
     try {
       const validation = await validate(request.all(), rule);
       if (validation.fails()) {
         response.unprocessableEntity(validation.messages());
-      } else if ((await Temple.query().where({
-          nombre: request.body.nombre,
-          city_id: request.body.city_id
+      } else if ((await Personal.query().where({
+          nombres: request.body.nombres,
+          apellidos: request.body.apellidos,
+          email: request.body.email
         }).fetch()).toJSON().length) {
         return response.unprocessableEntity({
-          message: "La Iglesia ingresada ya se encuentra registrada"
+          message: "El Miembro de Iglesia ingresado ya se encuentra registrado"
         })
       } else {
-        const body = request.only(['nombre', 'city_id'])
-        const iglesia = await Temple.create(body)
+        const body = request.only(['nombres', 'apellidos', 'email'])
+        const personal = await Personal.create(body)
         return response.send(true)
       }
     } catch (e) {
       return response.send(e.toJSON())
     }
-
   }
 
   /**
-   * Display a single iglesia.
-   * GET iglesias/:id
+   * Display a single miembro.
+   * GET miembros/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({
-    params,
-    request,
-    response,
-    view
-  }) {}
+  async show ({ params, request, response, view }) {
+  }
 
   /**
-   * Render a form to update an existing iglesia.
-   * GET iglesias/:id/edit
+   * Render a form to update an existing miembro.
+   * GET miembros/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit({
-    params,
-    request,
-    response,
-    view
-  }) {}
+  async edit ({ params, request, response, view }) {
+  }
 
   /**
-   * Update iglesia details.
-   * PUT or PATCH iglesias/:id
+   * Update miembro details.
+   * PUT or PATCH miembros/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({
-    params,
-    request,
-    response
-  }) {}
+  async update ({ params, request, response }) {
+  }
 
   /**
-   * Delete a iglesia with id.
-   * DELETE iglesias/:id
+   * Delete a miembro with id.
+   * DELETE miembros/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({
-    params,
-    request,
-    response
-  }) {}
+  async destroy ({ params, request, response }) {
+  }
 }
 
-module.exports = IglesiaController
+module.exports = MiembroController

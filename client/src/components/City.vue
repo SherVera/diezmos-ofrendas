@@ -24,7 +24,6 @@
 
         <q-card-actions align="right">
           <q-btn
-            v-close-popup
             flat
             label="Cancelar"
             color="primary"
@@ -32,7 +31,6 @@
           />
 
           <q-btn
-            v-close-popup
             flat
             label="Registrar"
             color="primary"

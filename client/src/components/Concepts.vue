@@ -1,4 +1,4 @@
-<template @confirmBank="confirm" @cancelBank="cancel">
+<template @confirmConcept="confirm" @cancelConcept="cancel">
   <div>
     <q-dialog
       v-model="active"
@@ -14,7 +14,7 @@
         </q-bar>
         <q-card-section>
           <div class="text-h6 row justify-center">
-            Banco
+            Concepto de Diezmo-Ofrenda
           </div>
         </q-card-section>
 
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: "Bank",
+  name: "Concept",
   props: {
     isActive: {
       type: Boolean,
@@ -64,15 +64,14 @@ export default {
   },
   methods: {
     confirm() {
-      console.log(this.form);
-      this.$api.post("bank", this.form).then(res => {
+      this.$api.post("concept", this.form).then(res => {
         this.form = {};
-        this.$emit("confirmBank");
+        this.$emit("confirmConcept");
       });
     },
     cancel() {
       this.form = {};
-      this.$emit("cancelBank");
+      this.$emit("cancelConcept");
     }
   }
 };

@@ -59,15 +59,25 @@ class CiudadController {
     request,
     response
   }) {
-    const validation = await validate(request.all(), fieldValidationRules);
-    if (!validation.fails()) {
-      const body = request.only(['nombre'])
-      console.log(City)
-      const city = await City.create(body)
-      response.send(true)
-    } else {
-      return validation.messages();
+    try {
+      const validation = await validate(request.all(), fieldValidationRules);
+      if (validation.fails()) {
+        response.unprocessableEntity(validation.messages());
+      } else if ((await City.query().where({
+          nombre: request.body.nombre
+        }).fetch()).toJSON().length) {
+        return response.unprocessableEntity({
+          message: "La Ciudad ingresada ya se encuentra registrada"
+        })
+      } else {
+        const body = request.only(['nombre'])
+        const city = await City.create(body)
+        response.send(true)
+      }
+    } catch (e) {
+      return response.send(e.toJSON())
     }
+
 
   }
 
