@@ -67,10 +67,8 @@ class ReportController {
       let totalOtros = 0
       let data = []
       const envelop = ( await Envelop.query().with('personal').with("transfers").with("titheOferings").fetch()).toJSON();
-      console.log(params);
       for (let i in envelop) {
         if (params.id == 1) {
-          console.log(moment(envelop[i].fecha).isSame(moment(params.fecha), 'week'));
           if (moment(envelop[i].fecha).isSame(moment(params.fecha), 'week')) {
             data.push([envelop[i].number, envelop[i].personal.nombres, envelop[i].personal.apellidos, envelop[i].total])
             total += Number(envelop[i].total)
@@ -130,7 +128,6 @@ class ReportController {
       }
       let cols = []
       params.id == 1 ? cols = semanalCols : cols = mesCols
-      console.log(data.length);
       /*
 
       let body = ['Nombres', 'Apellidos', 'Documento de Identidad',
@@ -146,6 +143,8 @@ class ReportController {
           bolditalics: "storage/fonts/Roboto-MediumItalic.ttf",
         },
       };
+      let title = `Listado de Sobre  ${params.id == 1 ? 'Semanal' : 'Mensual'}`
+      console.log(title);
       var printer = new PdfMake(fonts);
       let docDefinition = {
         pageSize: "letter",
@@ -153,7 +152,7 @@ class ReportController {
         pageMargins: [20, 40, 40, 60],
         content: [
           {
-            text: 'Listado de Sobre ' + params.id == 1 ? 'Semanal' : 'Mes',
+            text: title,
             alignment: "center",
             margin: [0, 10, 0, 0],
             fontSize: 14,
