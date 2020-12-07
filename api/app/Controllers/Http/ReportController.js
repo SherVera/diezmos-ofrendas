@@ -72,7 +72,7 @@ class ReportController {
         if (params.id == 1) {
           console.log(moment(envelop[i].fecha).isSame(moment(params.fecha), 'week'));
           if (moment(envelop[i].fecha).isSame(moment(params.fecha), 'week')) {
-            data.push([envelop[i].id, envelop[i].personal.nombres, envelop[i].personal.apellidos, envelop[i].total])
+            data.push([envelop[i].number, envelop[i].personal.nombres, envelop[i].personal.apellidos, envelop[i].total])
             total += Number(envelop[i].total)
           }
         } else {
@@ -114,7 +114,7 @@ class ReportController {
               return amount
             }
             data.push([
-              envelop[i].id,
+              envelop[i].number,
               `${envelop[i].personal.nombres} ${envelop[i].personal.apellidos}`,
               diezmoOfferings(),
               offerings(),

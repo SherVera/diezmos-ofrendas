@@ -6,11 +6,12 @@ const Schema = use('Schema')
 class EnvelopSchema extends Schema {
   up() {
     this.create('envelops', (table) => {
-      table.increments()
+      table.increments().primary()
       table.date('fecha').notNullable()
       table.integer('personal_id').references('id').inTable('personals').notNullable()
       table.integer('temple_id').references('id').inTable('temples').notNullable()
       table.decimal('total', [25], [2])
+      table.integer('number')
       table.timestamps()
     })
   }

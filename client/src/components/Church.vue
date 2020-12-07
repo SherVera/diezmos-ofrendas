@@ -100,7 +100,7 @@ export default {
       this.active = newVal;
     }
   },
-  created() {
+  mounted() {
     this.getCities();
   },
   methods: {

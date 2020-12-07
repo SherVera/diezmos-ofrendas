@@ -1,8 +1,10 @@
 'use strict'
 
 const Envelop = use('App/Models/Envelop')
+const Database = use('Database')
 const TitheOfering = use('App/Models/TitheOfering')
 const Transfer = use('App/Models/Transfer')
+const moment = use('moment')
 const {
   validate
 } = use("Validator")
@@ -61,12 +63,24 @@ class SobreController {
    */
   async store ({ request, response }) {
     try {
+      let number = 1
       const validation = await validate(request.all(), rule);
       if (validation.fails()) {
         response.unprocessableEntity(validation.messages());
       } else {
+        const lastRow = await Envelop.query().where(builder => {
+          builder.andWhereRaw('EXTRACT(MONTH FROM created_at::date) = ? ', moment().format('MM'))
+        }).last()
+        console.log(lastRow);
+        if (lastRow) {
+          console.log(moment(lastRow.created_at).format('MM'), lastRow.number, moment().format('MM'));
+          if (moment(lastRow.created_at).format('MM') == moment().format('MM')) {
+            number = lastRow.number + 1
+          }
+        }
         const body = request.only(['personal_id', 'fecha', 'temple_id', 'total'])
         body.total = Number(body.total)
+        body.number = number
         const sobre = await Envelop.create(body)
         if (request.body.ten.monto > 0) {
           await TitheOfering.create({
@@ -96,7 +110,6 @@ class SobreController {
         }
         if (request.body.allTransfer.length > 0) {
           for (let i in request.body.allTransfer) {
-            console.log(request.body.allTransfer[i]);
             await Transfer.create({
               envelop_id: sobre.id,
               fecha: request.body.allTransfer[i].fecha,
@@ -104,12 +117,12 @@ class SobreController {
               bank_id: request.body.allTransfer[i].bank_id,
               monto: Number(request.body.allTransfer[i].monto)
             })
-            console.log(i);
           }
         }
         return response.send(true)
       }
     } catch (e) {
+      console.log(e);
       return response.send(e)
     }
   }
